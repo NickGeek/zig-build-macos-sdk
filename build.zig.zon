@@ -8,5 +8,7 @@
 		"lib",
 		"include",
 		"Frameworks",
+		"build.zig",
+		"build.zig.zon",
 	},
 }
