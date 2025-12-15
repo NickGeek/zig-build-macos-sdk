@@ -65,6 +65,7 @@ private:
     struct ExpansionData {
         SInt32  absoluteAxisRemovalPercentage;
         SInt32  preferredAxisRemovalPercentage;
+        bool    appleVendorSupported;
         
         struct {
             OSArray *           elements;
@@ -83,7 +84,6 @@ private:
             OSArray *           elements;
             OSArray *           blessedUsagePairs;
             UInt8               bootMouseData[4];
-            bool                appleVendorSupported;
             IOHIDElement *      keyboardPower;
         } keyboard;
         
@@ -99,6 +99,7 @@ private:
             IOHIDElement *      relativeScanTime;
             IOHIDElement *      surfaceSwitch;
             IOHIDElement *      reportRate;
+            IOHIDElement *      noiseMetric;
             OSArray *           buttons;
         } digitizer;
         
@@ -162,8 +163,10 @@ private:
             struct {
                 IOFixed l4;
                 IOFixed r4;
-                IOFixed l5;
-                IOFixed r5;
+                IOFixed m1;
+                IOFixed m2;
+                IOFixed m3;
+                IOFixed m4;
             } extra;
             
         } gameController;
@@ -193,6 +196,10 @@ private:
         struct {
             OSArray *           elements;
         } temperature;
+
+        struct {
+            OSArray *           elements;
+        } heartrate;
 
         struct {
             IOHIDElement *      reportInterval;
@@ -248,7 +255,8 @@ private:
     bool                    parseDeviceOrientationElement(IOHIDElement * element);
     bool                    parsePhaseElement(IOHIDElement * element);
     bool                    parseProximityElement(IOHIDElement * element);
-
+    bool                    parseHeartRateElement(IOHIDElement * element);
+    
     void                    processLEDElements();
     void                    processDigitizerElements();
     void                    processMultiAxisElements();
@@ -273,7 +281,8 @@ private:
     void                    setSensorProperties();
     void                    setDeviceOrientationProperties();
     void                    setSurfaceDimensions();
-
+    void                    setHeartRateProperties();
+    
     UInt32                  checkGameControllerElement(IOHIDElement * element);
     UInt32                  checkMultiAxisElement(IOHIDElement * element);
     
@@ -303,6 +312,7 @@ private:
     void                    handleDeviceOrientationReport(AbsoluteTime timeStamp, UInt32 reportID);
     void                    handlePhaseReport(AbsoluteTime timeStamp, UInt32 reportID);
     void                    handleProximityReport(AbsoluteTime, UInt32 reportID);
+    void                    handleHeartRateReport(AbsoluteTime timeStamp, UInt32 reportID);
 
     bool                    serializeCharacterGestureState(void * ref, OSSerialize * serializer);
     bool                    conformTo (UInt32 usagePage, UInt32 usage);

@@ -303,6 +303,17 @@ public:
 	IOReturn getPageCounts( IOByteCount * residentPageCount,
 	    IOByteCount * dirtyPageCount);
 
+/*! @function getPageCounts
+ *   @abstract Retrieve the number of resident, dirty, and swapped pages encompassed by an IOMemoryDescriptor.
+ *   @param residentPageCount - If non-null, a pointer to a byte count that will return the number of resident pages encompassed by this IOMemoryDescriptor.
+ *   @param dirtyPageCount - If non-null, a pointer to a byte count that will return the number of resident, dirty pages encompassed by this IOMemoryDescriptor.
+ *   @param swappedPageCount - If non-null, a pointer to a byte count that will return the number of swapped pages encompassed by this IOMemoryDescriptor.
+ *   @result An IOReturn code. */
+
+	IOReturn getPageCounts( IOByteCount * residentPageCount,
+	    IOByteCount * dirtyPageCount,
+	    IOByteCount * swappedPageCount );
+
 /*! @function performOperation
  *   @abstract Perform an operation on the memory descriptor's memory.
  *   @discussion This method performs some operation on a range of the memory descriptor's memory. When a memory descriptor's memory is not mapped, it should be more efficient to use this method than mapping the memory to perform the operation virtually.
@@ -1025,6 +1036,14 @@ public:
 
 	virtual IOReturn complete(IODirection forDirection = kIODirectionNone) APPLE_KEXT_OVERRIDE;
 
+	virtual LIBKERN_RETURNS_NOT_RETAINED IOMemoryMap *      makeMapping(
+		IOMemoryDescriptor *    owner,
+		task_t                  intoTask,
+		IOVirtualAddress        atAddress,
+		IOOptionBits            options,
+		IOByteCount             offset,
+		IOByteCount             length ) APPLE_KEXT_OVERRIDE;
+
 	virtual IOReturn doMap(
 		vm_map_t                addressMap,
 		IOVirtualAddress *      atAddress,
@@ -1042,6 +1061,8 @@ public:
 // Factory method for cloning a persistent IOMD, see IOMemoryDescriptor
 	static OSPtr<IOMemoryDescriptor>
 	withPersistentMemoryDescriptor(IOGeneralMemoryDescriptor *originalMD);
+
+	IOOptionBits memoryReferenceCreateOptions(IOOptionBits options, IOMemoryMap * map);
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
