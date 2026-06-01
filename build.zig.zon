@@ -1,6 +1,7 @@
 .{
-	.name = "macos_sdk",
+	.name = .macos_sdk,
 	.version = "0.1.1",
+	.fingerprint = 0xb4c27c1e0726c97a,
 	.paths = .{
 		"LICENSE",
 		"README.md",
